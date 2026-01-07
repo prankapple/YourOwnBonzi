@@ -16,7 +16,7 @@ Requirements:
 * **.NET Framework 4.8** (not .NET Core / .NET 6+)
 * **x86 (32-bit)** build target
 * Valid `.acs` character file (Bonzi, Merlin, Genie, etc.)
-* DoubleAgent
+* [DoubleAgent](https://sourceforge.net/projects/doubleagent/files/version_1_2_stable/DoubleAgent_x64x86.msi/download)
 
 ---
 
