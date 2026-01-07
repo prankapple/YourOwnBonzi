@@ -2,7 +2,7 @@
 
 This README documents the **actual Microsoft Agent commands** used to control a Bonzi Buddy–style character in **C#** using **`AgentCtl.dll`**, **`AgentSvr.tlb`**, and **`DaServer.tlb`**.
 
-This is a **technical reference** you can use while building or modding a Bonzi-style desktop assistant.
+This is a **technical reference** you can use while building or modding a BonziBuddy-style desktop assistant.
 
 ---
 
@@ -16,6 +16,7 @@ Requirements:
 * **.NET Framework 4.8** (not .NET Core / .NET 6+)
 * **x86 (32-bit)** build target
 * Valid `.acs` character file (Bonzi, Merlin, Genie, etc.)
+* DoubleAgent
 
 ---
 
@@ -28,22 +29,48 @@ Add these references to your project:
 * `DaServer.tlb`
 
 ## Add bonzi animations to your project:
-First copy the **bonzi.acs** file to your conation of choice (eg. C:/)
+First copy the **Bonzi.acs** file to your location of choice (eg. C:/)
 ```csharp
 using AgentObjects;
+using System;
 
-Agent agent = new Agent();
-agent.Connected = true;
+class Program
+{
+    static IAgentCtlCharacterEx bonzi; // static field accessible everywhere
+    public static string userName = Environment.UserName;
 
-// Load the Bonzi character
-agent.Characters.Load("Bonzi", "C:/bonzi.acs"); // Change the location here
+    static void Main()
+    {
+        // Create and connect the Agent
+        Agent agent = new Agent();
+        agent.Connected = true;
 
-IAgentCtlCharacterEx bonzi =
-    agent.Characters["Bonzi"] as IAgentCtlCharacterEx;
+        // Load Bonzi character (adjust path if needed)
+        try
+        {
+            agent.Characters.Load("Bonzi", @"C:\Bonzi.acs");
+            bonzi = agent.Characters["Bonzi"] as IAgentCtlCharacterEx;
 
-// Test
-bonzi.Show(false);
-bonzi.Speak("Bonzi loaded successfully!");
+            if (bonzi != null)
+            {
+                bonzi.Show();
+                bonzi.Speak("Bonzi loaded");
+            }
+            else
+            {
+                Console.WriteLine("Failed to load Bonzi character.");
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Error: " + ex.Message);
+        }
+
+        // Keep console open
+        Console.ReadLine();
+    }
+}
+
 ```
 
 Namespace commonly used:
@@ -103,7 +130,7 @@ bonzi.Play("Congratulate");
 bool hasWave = bonzi.HasAnimation("Wave");
 ```
 
-### Common Animation Names
+### Common Animation Names (some don't work)
 
 ```
 Greet
